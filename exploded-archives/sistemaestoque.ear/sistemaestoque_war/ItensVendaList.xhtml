@@ -57,10 +57,10 @@
                 <ui:include src="layout/sort.xhtml">
                     <ui:param name="entityList" value="#{itensVendaList}"/>
                     <ui:param name="propertyLabel" value="Produto"/>
-                    <ui:param name="propertyPath" value="itensVenda.produto.id"/>
+                    <ui:param name="propertyPath" value="itensVenda.produto.nome"/>
                 </ui:include>
             </f:facet>
-            <h:outputText value="#{_itensVenda.produto.id}"/>
+            <h:outputText value="#{_itensVenda.produto.nome}"/>
         </h:column>
         <h:column>
             <f:facet name="header">
@@ -80,7 +80,9 @@
                     <ui:param name="propertyPath" value="itensVenda.valor"/>
                 </ui:include>
             </f:facet>
-            <h:outputText value="#{_itensVenda.valor}"/>
+            <h:outputText value="#{_itensVenda.valor}">
+             <f:convertNumber currencySymbol="R$ " type="currency"/> 
+             </h:outputText>
         </h:column>
         <h:column>
             <f:facet name="header">

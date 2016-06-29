@@ -24,15 +24,6 @@
                 </h:inputText>
             </s:decorate>
 
-				<s:decorate id="valorField" template="layout/edit.xhtml">
-					<ui:define name="label">Valor</ui:define>
-					<h:inputText id="valor" value="#{itensVendaHome.instance.valor}">
-						<f:convertNumber currencySymbol="R$ " type="currency" />
-						<a:support event="onblur" reRender="valorField"
-							bypassUpdates="true" ajaxSingle="true" />
-					</h:inputText>
-				</s:decorate>
-
 				<div style="clear:both">
                 <span class="required">*</span>
                 campos obrigatórios
@@ -44,13 +35,13 @@
 
             <h:commandButton id="save"
                           value="Salvar"
-                         action="#{itensVendaHome.persist}"
+                         action="#{itensVendaHome.salvarItemVenda}"
                        disabled="#{!itensVendaHome.wired}"
                        rendered="#{!itensVendaHome.managed}"/>
 
             <h:commandButton id="update"
                           value="Salvar"
-                         action="#{itensVendaHome.update}"
+                         action="#{itensVendaHome.atualizarItemVenda}"
                        rendered="#{itensVendaHome.managed}"/>
 
             <h:commandButton id="delete"

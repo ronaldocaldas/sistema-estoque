@@ -2,6 +2,7 @@ package com.javaelinux.sistemaestoque.action;
 
 import com.javaelinux.sistemaestoque.model.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -27,6 +28,7 @@ public class VendaHome extends EntityHome<Venda> {
 	@Override
 	protected Venda createInstance() {
 		Venda venda = new Venda();
+		venda.setDataVenda(new Date());
 		return venda;
 	}
 
