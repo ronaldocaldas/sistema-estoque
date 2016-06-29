@@ -1,0 +1,214 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="venda" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{vendaHome.managed ? 'Editar' : 'Adicionar'} Venda</f:facet>
+
+
+
+
+            <s:decorate id="dataVendaField" template="layout/edit.xhtml">
+                <ui:define name="label">Data venda</ui:define>
+                <rich:calendar id="dataVenda"
+                          value="#{vendaHome.instance.dataVenda}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                campos obrigatórios
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Salvar"
+                         action="#{vendaHome.persist}"
+                       disabled="#{!vendaHome.wired}"
+                       rendered="#{!vendaHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Salvar"
+                         action="#{vendaHome.update}"
+                       rendered="#{vendaHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Excluir"
+                         action="#{vendaHome.remove}"
+                      immediate="true"
+                       rendered="#{vendaHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancelar"
+             propagation="end"
+                    view="/Venda.xhtml"
+                rendered="#{vendaHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancelar"
+             propagation="end"
+                    view="/#{empty vendaFrom ? 'VendaList' : vendaFrom}.xhtml"
+                rendered="#{!vendaHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Cliente *" labelClass="required">
+    <div class="association" id="clienteParent">
+
+        <h:outputText value="Não existe cliente associada com este venda."
+                   rendered="#{vendaHome.instance.cliente == null}"/>
+
+        <rich:dataTable var="_cliente"
+                   value="#{vendaHome.instance.cliente}"
+                rendered="#{vendaHome.instance.cliente != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="clienteTable">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_cliente.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">CPF</f:facet>
+                <h:outputText value="#{_cliente.cpf}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Data cadastro</f:facet>
+                <h:outputText value="#{_cliente.dataCadastro}">
+                     <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Email</f:facet>
+                <h:outputText value="#{_cliente.email}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Endereço</f:facet>
+                <h:outputText value="#{_cliente.endereco}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nome</f:facet>
+                <h:outputText value="#{_cliente.nome}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Renda</f:facet>
+                <h:outputText value="#{_cliente.renda}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                <h:outputText value="#{_cliente.tipo}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{vendaHome.instance.cliente != null ? 'changeParentCliente' : 'selectParentCliente'}" value="#{vendaHome.instance.cliente != null ? 'Mudar' : 'Selecionar'} cliente"
+                       view="/ClienteList.xhtml">
+                <f:param name="from" value="VendaEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab label="Itens vendas">
+        <h:form styleClass="association" id="itensVendasChildren">
+
+            <h:outputText value="Não há itensVendas associada com este venda."
+                       rendered="#{empty vendaHome.itensVendas}"/>
+
+            <rich:dataTable value="#{vendaHome.itensVendas}"
+                           var="_itensVenda"
+                      rendered="#{not empty vendaHome.itensVendas}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="itensVendasTable">
+                <rich:column sortBy="#{_itensVenda.id}">
+                    <f:facet name="header">Id</f:facet>
+                    <h:outputText value="#{_itensVenda.id}"/>
+                </rich:column>
+                <rich:column sortBy="#{_itensVenda.quantidade}">
+                    <f:facet name="header">Quantidade</f:facet>
+                    <h:outputText value="#{_itensVenda.quantidade}"/>
+                </rich:column>
+                <rich:column sortBy="#{_itensVenda.valor}">
+                    <f:facet name="header">Valor</f:facet>
+                    <h:outputText value="#{_itensVenda.valor}"/>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{vendaHome.managed}" id="itensVendas">
+        <div class="actionButtons">
+            <s:button id="additensVenda"
+                  value="Adicionar itensVenda"
+                    view="/ItensVendaEdit.xhtml"
+             propagation="none">
+                 <f:param name="vendaId"
+                         value="#{vendaHome.instance.id}"/>
+                 <f:param name="itensVendaFrom" value="Venda"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+
+    <rich:tab label="Vendedor *" labelClass="required">
+    <div class="association" id="vendedorParent">
+
+        <h:outputText value="Não existe vendedor associada com este venda."
+                   rendered="#{vendaHome.instance.vendedor == null}"/>
+
+        <rich:dataTable var="_vendedor"
+                   value="#{vendaHome.instance.vendedor}"
+                rendered="#{vendaHome.instance.vendedor != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="vendedorTable">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_vendedor.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">CPF</f:facet>
+                <h:outputText value="#{_vendedor.cpf}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Email</f:facet>
+                <h:outputText value="#{_vendedor.email}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Endereço</f:facet>
+                <h:outputText value="#{_vendedor.endereco}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nome</f:facet>
+                <h:outputText value="#{_vendedor.nome}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{vendaHome.instance.vendedor != null ? 'changeParentVendedor' : 'selectParentVendedor'}" value="#{vendaHome.instance.vendedor != null ? 'Mudar' : 'Selecionar'} vendedor"
+                       view="/VendedorList.xhtml">
+                <f:param name="from" value="VendaEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

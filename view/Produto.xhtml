@@ -1,0 +1,256 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Detalhes do Produto</f:facet>
+
+
+        <s:decorate id="dataCadastro" template="layout/display.xhtml">
+            <ui:define name="label">Data cadastro</ui:define>
+            <h:outputText value="#{produtoHome.instance.dataCadastro}">
+                 <f:convertDateTime pattern="dd/MM/yyyy" />
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="descricao" template="layout/display.xhtml">
+            <ui:define name="label">Descrição</ui:define>
+            <h:outputText value="#{produtoHome.instance.descricao}"/>
+        </s:decorate>
+
+        <s:decorate id="nome" template="layout/display.xhtml">
+            <ui:define name="label">Nome</ui:define>
+            <h:outputText value="#{produtoHome.instance.nome}"/>
+        </s:decorate>
+
+        <s:decorate id="quantidade" template="layout/display.xhtml">
+            <ui:define name="label">Quantidade</ui:define>
+            <h:outputText value="#{produtoHome.instance.quantidade}"/>
+        </s:decorate>
+
+        <s:decorate id="valorPago" template="layout/display.xhtml">
+            <ui:define name="label">Valor pago</ui:define>
+            <h:outputText value="#{produtoHome.instance.valorPago}">
+             <f:convertNumber currencySymbol="R$ " type="currency"/>
+             </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="valorVenda" template="layout/display.xhtml">
+            <ui:define name="label">Valor venda</ui:define>
+            <h:outputText value="#{produtoHome.instance.valorVenda}">
+             <f:convertNumber currencySymbol="R$ " type="currency"/>
+             </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/ProdutoEdit.xhtml"
+                    id="edit"
+                 value="Editar"/>
+
+        <s:button view="/#{empty produtoFrom ? 'ProdutoList' : produtoFrom}.xhtml"
+                    id="done"
+                 value="Voltar"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Categoria</h:panelGroup>
+        </f:facet>
+    <div class="association" id="categoriaParent">
+
+        <h:outputText value="Não existe categoria associada com este produto."
+                   rendered="#{produtoHome.instance.categoria == null}"/>
+
+        <rich:dataTable var="_categoria"
+                   value="#{produtoHome.instance.categoria}"
+                rendered="#{produtoHome.instance.categoria != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="categoriaTable">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_categoria.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nome</f:facet>
+                <h:outputText value="#{_categoria.nome}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Ação</f:facet>
+                <s:link id="viewcategoria"
+                     value="Visualizar"
+                      view="/Categoria.xhtml">
+                    <f:param name="categoriaId"
+                           value="#{_categoria.id}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Fornecedor</h:panelGroup>
+        </f:facet>
+    <div class="association" id="fornecedorParent">
+
+        <h:outputText value="Não existe fornecedor associada com este produto."
+                   rendered="#{produtoHome.instance.fornecedor == null}"/>
+
+        <rich:dataTable var="_fornecedor"
+                   value="#{produtoHome.instance.fornecedor}"
+                rendered="#{produtoHome.instance.fornecedor != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="fornecedorTable">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_fornecedor.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cep</f:facet>
+                <h:outputText value="#{_fornecedor.cep}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">CNPJ</f:facet>
+                <h:outputText value="#{_fornecedor.cnpj}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Email</f:facet>
+                <h:outputText value="#{_fornecedor.email}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Endereço</f:facet>
+                <h:outputText value="#{_fornecedor.endereco}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fone</f:facet>
+                <h:outputText value="#{_fornecedor.fone}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nome</f:facet>
+                <h:outputText value="#{_fornecedor.nome}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Razao social</f:facet>
+                <h:outputText value="#{_fornecedor.razaoSocial}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Ação</f:facet>
+                <s:link id="viewfornecedor"
+                     value="Visualizar"
+                      view="/Fornecedor.xhtml">
+                    <f:param name="fornecedorId"
+                           value="#{_fornecedor.id}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Itens vendas</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="itensVendasChildren">
+
+        <h:outputText value="Não há itensVendas associada com este produto."
+                   rendered="#{empty produtoHome.itensVendas}"/>
+
+        <rich:dataTable value="#{produtoHome.itensVendas}"
+                       var="_itensVenda"
+                  rendered="#{not empty produtoHome.itensVendas}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="itensVendasTable">
+            <rich:column sortBy="#{_itensVenda.id}">
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_itensVenda.id}"/>
+            </rich:column>
+            <rich:column sortBy="#{_itensVenda.quantidade}">
+                <f:facet name="header">Quantidade</f:facet>
+                <h:outputText value="#{_itensVenda.quantidade}"/>
+            </rich:column>
+            <rich:column sortBy="#{_itensVenda.valor}">
+                <f:facet name="header">Valor</f:facet>
+                <h:outputText value="#{_itensVenda.valor}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Ação</f:facet>
+                <s:link id="selectitensVenda"
+                     value="Selecionar"
+                      view="/ItensVenda.xhtml">
+                    <f:param name="itensVendaId"
+                            value="#{_itensVenda.id}"/>
+                    <f:param name="itensVendaFrom" value="Produto"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+              value="Adicionar itensVenda"
+                view="/ItensVendaEdit.xhtml">
+            <f:param name="produtoId"
+                    value="#{produtoHome.instance.id}"/>
+            <f:param name="itensVendaFrom" value="Produto"/>
+        </s:button>
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Unidade</h:panelGroup>
+        </f:facet>
+    <div class="association" id="unidadeParent">
+
+        <h:outputText value="Não existe unidade associada com este produto."
+                   rendered="#{produtoHome.instance.unidade == null}"/>
+
+        <rich:dataTable var="_unidade"
+                   value="#{produtoHome.instance.unidade}"
+                rendered="#{produtoHome.instance.unidade != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="unidadeTable">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_unidade.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descrição</f:facet>
+                <h:outputText value="#{_unidade.descricao}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Ação</f:facet>
+                <s:link id="viewunidade"
+                     value="Visualizar"
+                      view="/Unidade.xhtml">
+                    <f:param name="unidadeId"
+                           value="#{_unidade.id}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

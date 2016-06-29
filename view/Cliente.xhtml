@@ -1,0 +1,126 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Detalhes do Cliente</f:facet>
+
+  		<s:decorate id="nome" template="layout/display.xhtml">
+            <ui:define name="label">Nome</ui:define>
+            <h:outputText value="#{clienteHome.instance.nome}"/>
+        </s:decorate>
+        
+        <s:decorate id="cpf" template="layout/display.xhtml">
+            <ui:define name="label">CPF</ui:define>
+            <h:outputText value="#{clienteHome.instance.cpf}">
+             	<rich:jQuery selector="#cpf" query="mask('999.999.999-99')" timing="onload"/>
+             </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="dataCadastro" template="layout/display.xhtml">
+            <ui:define name="label">Data cadastro</ui:define>
+            <h:outputText value="#{clienteHome.instance.dataCadastro}">
+                 <f:convertDateTime pattern="dd/MM/yyyy" />
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="email" template="layout/display.xhtml">
+            <ui:define name="label">Email</ui:define>
+            <h:outputText value="#{clienteHome.instance.email}"/>
+        </s:decorate>
+
+        <s:decorate id="endereco" template="layout/display.xhtml">
+            <ui:define name="label">Endereço</ui:define>
+            <h:outputText value="#{clienteHome.instance.endereco}"/>
+        </s:decorate>
+
+        <s:decorate id="renda" template="layout/display.xhtml">
+            <ui:define name="label">Renda</ui:define>
+            <h:outputText value="#{clienteHome.instance.renda}">
+            <f:convertNumber currencySymbol="R$ " type="currency"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="tipo" template="layout/display.xhtml">
+            <ui:define name="label">Tipo</ui:define>
+            <h:outputText value="#{clienteHome.instance.tipo}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/ClienteEdit.xhtml"
+                    id="edit"
+                 value="Editar"/>
+
+        <s:button view="/#{empty clienteFrom ? 'ClienteList' : clienteFrom}.xhtml"
+                    id="done"
+                 value="Voltar"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Vendas</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="vendasChildren">
+
+        <h:outputText value="Não há vendas associada com este cliente."
+                   rendered="#{empty clienteHome.vendas}"/>
+
+        <rich:dataTable value="#{clienteHome.vendas}"
+                       var="_venda"
+                  rendered="#{not empty clienteHome.vendas}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="vendasTable">
+            <rich:column sortBy="#{_venda.id}">
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_venda.id}"/>
+            </rich:column>
+            <rich:column sortBy="#{_venda.dataVenda}">
+                <f:facet name="header">Data venda</f:facet>
+                <h:outputText value="#{_venda.dataVenda}">
+                     <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Ação</f:facet>
+                <s:link id="selectvenda"
+                     value="Selecionar"
+                      view="/Venda.xhtml">
+                    <f:param name="vendaId"
+                            value="#{_venda.id}"/>
+                    <f:param name="vendaFrom" value="Cliente"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+              value="Adicionar venda"
+                view="/VendaEdit.xhtml">
+            <f:param name="clienteId"
+                    value="#{clienteHome.instance.id}"/>
+            <f:param name="vendaFrom" value="Cliente"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,142 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="unidade" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{unidadeHome.managed ? 'Editar' : 'Adicionar'} Unidade</f:facet>
+
+
+
+            <s:decorate id="descricaoField" template="layout/edit.xhtml">
+                <ui:define name="label">Descrição</ui:define>
+                <h:inputText id="descricao"
+                       required="true"
+                           size="100"
+                      maxlength="100"
+                          value="#{unidadeHome.instance.descricao}">
+                    <a:support event="onblur" reRender="descricaoField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                campos obrigatórios
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Salvar"
+                         action="#{unidadeHome.persist}"
+                       disabled="#{!unidadeHome.wired}"
+                       rendered="#{!unidadeHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Salvar"
+                         action="#{unidadeHome.update}"
+                       rendered="#{unidadeHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Excluir"
+                         action="#{unidadeHome.remove}"
+                      immediate="true"
+                       rendered="#{unidadeHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancelar"
+             propagation="end"
+                    view="/Unidade.xhtml"
+                rendered="#{unidadeHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancelar"
+             propagation="end"
+                    view="/#{empty unidadeFrom ? 'UnidadeList' : unidadeFrom}.xhtml"
+                rendered="#{!unidadeHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Produtos">
+        <h:form styleClass="association" id="produtosChildren">
+
+            <h:outputText value="Não há produtos associada com este unidade."
+                       rendered="#{empty unidadeHome.produtos}"/>
+
+            <rich:dataTable value="#{unidadeHome.produtos}"
+                           var="_produto"
+                      rendered="#{not empty unidadeHome.produtos}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="produtosTable">
+                <rich:column sortBy="#{_produto.id}">
+                    <f:facet name="header">Id</f:facet>
+                    <h:outputText value="#{_produto.id}"/>
+                </rich:column>
+                <rich:column sortBy="#{_produto.dataCadastro}">
+                    <f:facet name="header">Data cadastro</f:facet>
+                    <h:outputText value="#{_produto.dataCadastro}">
+                         <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_produto.descricao}">
+                    <f:facet name="header">Descrição</f:facet>
+                    <h:outputText value="#{_produto.descricao}"/>
+                </rich:column>
+                <rich:column sortBy="#{_produto.nome}">
+                    <f:facet name="header">Nome</f:facet>
+                    <h:outputText value="#{_produto.nome}"/>
+                </rich:column>
+                <rich:column sortBy="#{_produto.quantidade}">
+                    <f:facet name="header">Quantidade</f:facet>
+                    <h:outputText value="#{_produto.quantidade}"/>
+                </rich:column>
+                <rich:column sortBy="#{_produto.valorPago}">
+                    <f:facet name="header">Valor pago</f:facet>
+                    <h:outputText value="#{_produto.valorPago}">
+                      <f:convertNumber currencySymbol="R$ " type="currency"/> 
+                      </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_produto.valorVenda}">
+                    <f:facet name="header">Valor venda</f:facet>
+                    <h:outputText value="#{_produto.valorVenda}">
+                      <f:convertNumber currencySymbol="R$ " type="currency"/> 
+                    </h:outputText>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{unidadeHome.managed}" id="produtos">
+        <div class="actionButtons">
+            <s:button id="addproduto"
+                  value="Adicionar produto"
+                    view="/ProdutoEdit.xhtml"
+             propagation="none">
+                 <f:param name="unidadeId"
+                         value="#{unidadeHome.instance.id}"/>
+                 <f:param name="produtoFrom" value="Unidade"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

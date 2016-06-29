@@ -1,0 +1,203 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="fornecedor" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{fornecedorHome.managed ? 'Editar' : 'Adicionar'} Fornecedor</f:facet>
+
+    <s:decorate id="nomeField" template="layout/edit.xhtml">
+                <ui:define name="label">Nome</ui:define>
+                <h:inputText id="nome"
+                       required="true"
+                           size="45"
+                      maxlength="45"
+                          value="#{fornecedorHome.instance.nome}">
+                    <a:support event="onblur" reRender="nomeField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+
+            <s:decorate id="razaoSocialField" template="layout/edit.xhtml">
+                <ui:define name="label">Razao social</ui:define>
+                <h:inputText id="razaoSocial"
+                           size="45"
+                      maxlength="45"
+                          value="#{fornecedorHome.instance.razaoSocial}">
+                    <a:support event="onblur" reRender="razaoSocialField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+            <s:decorate id="cnpjField" template="layout/edit.xhtml">
+                <ui:define name="label">CNPJ</ui:define>
+                <h:inputText id="cnpj"
+                           size="15"
+                      maxlength="15"
+                          value="#{fornecedorHome.instance.cnpj}">
+                          <rich:jQuery selector="#cnpj" query="mask('999.999.999-99')" timing="onload"/>
+                    <a:support event="onblur" reRender="cnpjField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="emailField" template="layout/edit.xhtml">
+                <ui:define name="label">Email</ui:define>
+                <h:inputText id="email"
+                           size="45"
+                      maxlength="45"
+                          value="#{fornecedorHome.instance.email}">
+                    <a:support event="onblur" reRender="emailField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="enderecoField" template="layout/edit.xhtml">
+                <ui:define name="label">Endereço</ui:define>
+                <h:inputText id="endereco"
+                           size="100"
+                      maxlength="100"
+                          value="#{fornecedorHome.instance.endereco}">
+                    <a:support event="onblur" reRender="enderecoField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+            
+    <s:decorate id="cepField" template="layout/edit.xhtml">
+                <ui:define name="label">Cep</ui:define>
+                <h:inputText id="cep"
+                           size="15"
+                      maxlength="15"
+                          value="#{fornecedorHome.instance.cep}">
+                             <rich:jQuery selector="#cep" query="mask('99999-999')" timing="onload"/>
+                    <a:support event="onblur" reRender="cepField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="foneField" template="layout/edit.xhtml">
+                <ui:define name="label">Fone</ui:define>
+                <h:inputText id="fone"
+                           size="45"
+                      maxlength="45"
+                          value="#{fornecedorHome.instance.fone}">
+                          <rich:jQuery selector="#fone" query="mask('(99) 9999-9999')" timing="onload"/>
+                    <a:support event="onblur" reRender="foneField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                campos obrigatórios
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Salvar"
+                         action="#{fornecedorHome.persist}"
+                       disabled="#{!fornecedorHome.wired}"
+                       rendered="#{!fornecedorHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Salvar"
+                         action="#{fornecedorHome.update}"
+                       rendered="#{fornecedorHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Excluir"
+                         action="#{fornecedorHome.remove}"
+                      immediate="true"
+                       rendered="#{fornecedorHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancelar"
+             propagation="end"
+                    view="/Fornecedor.xhtml"
+                rendered="#{fornecedorHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancelar"
+             propagation="end"
+                    view="/#{empty fornecedorFrom ? 'FornecedorList' : fornecedorFrom}.xhtml"
+                rendered="#{!fornecedorHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Produtos">
+        <h:form styleClass="association" id="produtosChildren">
+
+            <h:outputText value="Não há produtos associados com este fornecedor."
+                       rendered="#{empty fornecedorHome.produtos}"/>
+
+            <rich:dataTable value="#{fornecedorHome.produtos}"
+                           var="_produto"
+                      rendered="#{not empty fornecedorHome.produtos}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="produtosTable">
+                <rich:column sortBy="#{_produto.id}">
+                    <f:facet name="header">Id</f:facet>
+                    <h:outputText value="#{_produto.id}"/>
+                </rich:column>
+                <rich:column sortBy="#{_produto.dataCadastro}">
+                    <f:facet name="header">Data cadastro</f:facet>
+                    <h:outputText value="#{_produto.dataCadastro}">
+                         <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_produto.descricao}">
+                    <f:facet name="header">Descrição</f:facet>
+                    <h:outputText value="#{_produto.descricao}"/>
+                </rich:column>
+                <rich:column sortBy="#{_produto.nome}">
+                    <f:facet name="header">Nome</f:facet>
+                    <h:outputText value="#{_produto.nome}"/>
+                </rich:column>
+                <rich:column sortBy="#{_produto.quantidade}">
+                    <f:facet name="header">Quantidade</f:facet>
+                    <h:outputText value="#{_produto.quantidade}"/>
+                </rich:column>
+                <rich:column sortBy="#{_produto.valorPago}">
+                    <f:facet name="header">Valor pago</f:facet>
+                    <h:outputText value="#{_produto.valorPago}"/>
+                </rich:column>
+                <rich:column sortBy="#{_produto.valorVenda}">
+                    <f:facet name="header">Valor venda</f:facet>
+                    <h:outputText value="#{_produto.valorVenda}"/>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{fornecedorHome.managed}" id="produtos">
+        <div class="actionButtons">
+            <s:button id="addproduto"
+                  value="Adicionar produto"
+                    view="/ProdutoEdit.xhtml"
+             propagation="none">
+                 <f:param name="fornecedorId"
+                         value="#{fornecedorHome.instance.id}"/>
+                 <f:param name="produtoFrom" value="Fornecedor"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

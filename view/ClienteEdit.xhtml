@@ -1,0 +1,161 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="cliente" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{clienteHome.managed ? 'Editar' : 'Adicionar'} Cliente</f:facet>
+
+ 			<s:decorate id="nomeField" template="layout/edit.xhtml">
+                <ui:define name="label">Nome</ui:define>
+                <h:inputText id="nome"
+                       required="true"
+                           size="45"
+                      maxlength="45"
+                      value="#{clienteHome.instance.nome}"/>
+            </s:decorate>
+
+
+            <s:decorate id="cpfField" template="layout/edit.xhtml">
+                <ui:define name="label">CPF</ui:define>
+                 <h:inputText id="cpf"
+                           size="15"
+                      		maxlength="15"
+                              value="#{clienteHome.instance.cpf}">
+                              <rich:jQuery selector="#cpf" query="mask('999.999.999-99')" timing="onload"/>
+                              </h:inputText>
+            </s:decorate>
+
+            <s:decorate id="emailField" template="layout/edit.xhtml">
+                <ui:define name="label">Email</ui:define>
+                   <h:inputText id="email"
+                           size="45"
+                     	   maxlength="45"
+                      	   value="#{clienteHome.instance.email}"/>
+            </s:decorate>
+
+
+            <s:decorate id="enderecoField" template="layout/edit.xhtml">
+                <ui:define name="label">Endereço</ui:define>
+               <h:inputText id="endereco"
+                           size="100"
+                           maxlength="100"
+                           value="#{clienteHome.instance.endereco}"/>
+            </s:decorate>
+
+            <s:decorate id="rendaField" template="layout/edit.xhtml">
+                <ui:define name="label">Renda</ui:define>
+                <h:inputText id="renda"
+                       required="true"
+                          value="#{clienteHome.instance.renda}">
+                    <f:convertNumber currencySymbol="R$ " type="currency"/> 
+                    <a:support event="onblur" reRender="rendaField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="tipoField" template="layout/edit.xhtml">
+                <ui:define name="label">Tipo</ui:define>
+                  <h:selectOneMenu id="tipo"  
+                value="#{clienteHome.instance.tipo}">  
+                <f:selectItem itemValue="fisico" itemLabel="Fisíco"/>
+                  <f:selectItem itemValue="juridico" itemLabel="Jurídico"/>  
+                  <a:support event="onblur" reRender="tipoField" bypassUpdates="true" ajaxSingle="true"/>
+            </h:selectOneMenu>  
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                campos obrigatórios
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Salvar"
+                         action="#{clienteHome.persist}"
+                       disabled="#{!clienteHome.wired}"
+                       rendered="#{!clienteHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Salvar"
+                         action="#{clienteHome.update}"
+                       rendered="#{clienteHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Excluir"
+                         action="#{clienteHome.remove}"
+                      immediate="true"
+                       rendered="#{clienteHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancelar"
+             propagation="end"
+                    view="/Cliente.xhtml"
+                rendered="#{clienteHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancelar"
+             propagation="end"
+                    view="/#{empty clienteFrom ? 'ClienteList' : clienteFrom}.xhtml"
+                rendered="#{!clienteHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Vendas">
+        <h:form styleClass="association" id="vendasChildren">
+
+            <h:outputText value="Não há vendas associada com este cliente."
+                       rendered="#{empty clienteHome.vendas}"/>
+
+            <rich:dataTable value="#{clienteHome.vendas}"
+                           var="_venda"
+                      rendered="#{not empty clienteHome.vendas}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="vendasTable">
+                <rich:column sortBy="#{_venda.id}">
+                    <f:facet name="header">Id</f:facet>
+                    <h:outputText value="#{_venda.id}"/>
+                </rich:column>
+                <rich:column sortBy="#{_venda.dataVenda}">
+                    <f:facet name="header">Data venda</f:facet>
+                    <h:outputText value="#{_venda.dataVenda}">
+                         <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{clienteHome.managed}" id="vendas">
+        <div class="actionButtons">
+            <s:button id="addvenda"
+                  value="Adicionar venda"
+                    view="/VendaEdit.xhtml"
+             propagation="none">
+                 <f:param name="clienteId"
+                         value="#{clienteHome.instance.id}"/>
+                 <f:param name="vendaFrom" value="Cliente"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

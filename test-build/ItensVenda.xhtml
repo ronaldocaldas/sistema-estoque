@@ -1,0 +1,169 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Detalhe do item</f:facet>
+
+
+        <s:decorate id="quantidade" template="layout/display.xhtml">
+            <ui:define name="label">Quantidade</ui:define>
+            <h:outputText value="#{itensVendaHome.instance.quantidade}"/>
+        </s:decorate>
+
+        <s:decorate id="valor" template="layout/display.xhtml">
+            <ui:define name="label">Valor</ui:define>
+            <h:outputText value="#{itensVendaHome.instance.valor}">
+            	 <f:convertNumber currencySymbol="R$ " type="currency"/> 
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/ItensVendaEdit.xhtml"
+                    id="edit"
+                 value="Editar"/>
+
+        <s:button view="/#{empty itensVendaFrom ? 'ItensVendaList' : itensVendaFrom}.xhtml"
+                    id="done"
+                 value="Voltar"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Produto</h:panelGroup>
+        </f:facet>
+    <div class="association" id="produtoParent">
+
+        <h:outputText value="Não existe produto associada com este item"
+                   rendered="#{itensVendaHome.instance.produto == null}"/>
+
+        <rich:dataTable var="_produto"
+                   value="#{itensVendaHome.instance.produto}"
+                rendered="#{itensVendaHome.instance.produto != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="produtoTable">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_produto.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Categoria</f:facet>
+                <h:outputText value="#{_produto.categoria.nome}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Data cadastro</f:facet>
+                <h:outputText value="#{_produto.dataCadastro}">
+                     <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Descrição</f:facet>
+                <h:outputText value="#{_produto.descricao}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fornecedor</f:facet>
+                <h:outputText value="#{_produto.fornecedor.nome}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nome</f:facet>
+                <h:outputText value="#{_produto.nome}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Quantidade</f:facet>
+                <h:outputText value="#{_produto.quantidade}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Unidade</f:facet>
+                <h:outputText value="#{_produto.unidade.descricao}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor pago</f:facet>
+                <h:outputText value="#{_produto.valorPago}">
+                 <f:convertNumber currencySymbol="R$ " type="currency"/> 
+                 </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor venda</f:facet>
+                <h:outputText value="#{_produto.valorVenda}">
+                 <f:convertNumber currencySymbol="R$ " type="currency"/> 
+                 </h:outputText>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Ação</f:facet>
+                <s:link id="viewproduto"
+                     value="Visualizar"
+                      view="/Produto.xhtml">
+                    <f:param name="produtoId"
+                           value="#{_produto.id}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Venda</h:panelGroup>
+        </f:facet>
+    <div class="association" id="vendaParent">
+
+        <h:outputText value="Não existe venda associada com este item"
+                   rendered="#{itensVendaHome.instance.venda == null}"/>
+
+        <rich:dataTable var="_venda"
+                   value="#{itensVendaHome.instance.venda}"
+                rendered="#{itensVendaHome.instance.venda != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="vendaTable">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_venda.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Cliente</f:facet>
+                <h:outputText value="#{_venda.cliente.nome}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Data venda</f:facet>
+                <h:outputText value="#{_venda.dataVenda}">
+                     <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Vendedor</f:facet>
+                <h:outputText value="#{_venda.vendedor.nome}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Ação</f:facet>
+                <s:link id="viewvenda"
+                     value="Visualizar"
+                      view="/Venda.xhtml">
+                    <f:param name="vendaId"
+                           value="#{_venda.id}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

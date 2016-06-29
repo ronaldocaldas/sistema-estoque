@@ -1,0 +1,236 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="fornecedorSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="Pesquisa por Fornecedor" switchType="ajax">
+
+   		    <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Nome</ui:define>
+                <h:inputText id="nome" value="#{fornecedorList.fornecedor.nome}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Razão social</ui:define>
+                <h:inputText id="razaoSocial" value="#{fornecedorList.fornecedor.razaoSocial}"/>
+            </s:decorate>
+            
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Cep</ui:define>
+                <h:inputText id="cep" value="#{fornecedorList.fornecedor.cep}">
+                         <rich:jQuery selector="#cep" query="mask('99999-999')" timing="onload"/>
+                </h:inputText>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">CNPJ</ui:define>
+                <h:inputText id="cnpj" value="#{fornecedorList.fornecedor.cnpj}">
+                 <rich:jQuery selector="#cnpj" query="mask('999.999.999-99')" timing="onload"/>
+                </h:inputText>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Email</ui:define>
+                <h:inputText id="email" value="#{fornecedorList.fornecedor.email}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Endereço</ui:define>
+                <h:inputText id="endereco" value="#{fornecedorList.fornecedor.endereco}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Fone</ui:define>
+                <h:inputText id="fone" value="#{fornecedorList.fornecedor.fone}">
+                         <rich:jQuery selector="#fone" query="mask('(99) 9999-9999')" timing="onload"/>
+                </h:inputText>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Combinar</ui:define>
+                <h:selectOneRadio id="logic" value="#{fornecedorList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="Tudo" itemValue="and"/>
+                    <f:selectItem itemLabel="Algum" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Pesquisar" action="/FornecedorList.xhtml"/>
+            <s:button id="reset" value="Limpar" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header"> Resultado da Pesquisa de Fornecedor (#{empty fornecedorList.resultList ? 0 : (fornecedorList.paginated ? fornecedorList.resultCount : fornecedorList.resultList.size)})</f:facet>
+    <div class="results" id="fornecedorList">
+
+    <h:outputText value="The fornecedor search retornou sem resultados."
+               rendered="#{empty fornecedorList.resultList}"/>
+
+    <rich:dataTable id="fornecedorList"
+                var="_fornecedor"
+              value="#{fornecedorList.resultList}"
+           rendered="#{not empty fornecedorList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{fornecedorList}"/>
+                    <ui:param name="propertyLabel" value="Id"/>
+                    <ui:param name="propertyPath" value="fornecedor.id"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_fornecedor.id}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{fornecedorList}"/>
+                    <ui:param name="propertyLabel" value="Cep"/>
+                    <ui:param name="propertyPath" value="fornecedor.cep"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_fornecedor.cep}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{fornecedorList}"/>
+                    <ui:param name="propertyLabel" value="Cnpj"/>
+                    <ui:param name="propertyPath" value="fornecedor.cnpj"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_fornecedor.cnpj}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{fornecedorList}"/>
+                    <ui:param name="propertyLabel" value="Email"/>
+                    <ui:param name="propertyPath" value="fornecedor.email"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_fornecedor.email}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{fornecedorList}"/>
+                    <ui:param name="propertyLabel" value="Endereco"/>
+                    <ui:param name="propertyPath" value="fornecedor.endereco"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_fornecedor.endereco}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{fornecedorList}"/>
+                    <ui:param name="propertyLabel" value="Fone"/>
+                    <ui:param name="propertyPath" value="fornecedor.fone"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_fornecedor.fone}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{fornecedorList}"/>
+                    <ui:param name="propertyLabel" value="Nome"/>
+                    <ui:param name="propertyPath" value="fornecedor.nome"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_fornecedor.nome}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{fornecedorList}"/>
+                    <ui:param name="propertyLabel" value="Razao social"/>
+                    <ui:param name="propertyPath" value="fornecedor.razaoSocial"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_fornecedor.razaoSocial}"/>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Ação</f:facet>
+            <s:link view="/#{empty from ? 'Fornecedor' : from}.xhtml"
+                   value="#{empty from ? 'Visualizar' : 'Selecionar'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="fornecedorViewId">
+                <f:param name="fornecedorId"
+                        value="#{_fornecedor.id}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/FornecedorEdit.xhtml"
+                   value="Editar"
+             propagation="none"
+                      id="fornecedorEdit"
+                rendered="#{empty from}">
+                <f:param name="fornecedorId"
+                        value="#{_fornecedor.id}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/FornecedorList.xhtml"
+            rendered="#{fornecedorList.previousExists}"
+               value="#{messages.left}#{messages.left} Primeira Página"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/FornecedorList.xhtml"
+            rendered="#{fornecedorList.previousExists}"
+               value="#{messages.left} Página Anterior"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{fornecedorList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/FornecedorList.xhtml"
+            rendered="#{fornecedorList.nextExists}"
+               value="Próxima Página #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{fornecedorList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/FornecedorList.xhtml"
+            rendered="#{fornecedorList.nextExists}"
+               value="Última Página #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{fornecedorList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/FornecedorEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Criar fornecedor">
+            <f:param name="fornecedorId"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

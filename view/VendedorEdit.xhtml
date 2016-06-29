@@ -1,0 +1,138 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="vendedor" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{vendedorHome.managed ? 'Editar' : 'Adicionar'} Vendedor</f:facet>
+            
+            <s:decorate id="nomeField" template="layout/edit.xhtml">
+                <ui:define name="label">Nome</ui:define>
+                <h:inputText id="nome"
+                       required="true"
+                           size="45"
+                      maxlength="45"
+                       value="#{vendedorHome.instance.nome}"/>
+            </s:decorate>
+            
+             <s:decorate id="cpfField" template="layout/edit.xhtml">
+                <ui:define name="label">CPF</ui:define>
+                 <h:inputText id="cpf"
+                           size="15"
+                      		maxlength="15"
+                             value="#{vendedorHome.instance.cpf}">
+                              <rich:jQuery selector="#cpf" query="mask('999.999.999-99')" timing="onload"/>
+                              </h:inputText>
+            </s:decorate>
+
+  			<s:decorate id="emailField" template="layout/edit.xhtml">
+                <ui:define name="label">Email</ui:define>
+                   <h:inputText id="email"
+                           size="45"
+                     	   maxlength="45"
+                      	  value="#{vendedorHome.instance.email}"/>
+            </s:decorate>
+
+            <s:decorate id="enderecoField" template="layout/edit.xhtml">
+                <ui:define name="label">Endereço</ui:define>
+                <h:inputTextarea id="endereco"
+                               cols="80"
+                               rows="3"
+                              value="#{vendedorHome.instance.endereco}"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                campos obrigatórios
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Salvar"
+                         action="#{vendedorHome.persist}"
+                       disabled="#{!vendedorHome.wired}"
+                       rendered="#{!vendedorHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Salvar"
+                         action="#{vendedorHome.update}"
+                       rendered="#{vendedorHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Excluir"
+                         action="#{vendedorHome.remove}"
+                      immediate="true"
+                       rendered="#{vendedorHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancelar"
+             propagation="end"
+                    view="/Vendedor.xhtml"
+                rendered="#{vendedorHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancelar"
+             propagation="end"
+                    view="/#{empty vendedorFrom ? 'VendedorList' : vendedorFrom}.xhtml"
+                rendered="#{!vendedorHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Vendas">
+        <h:form styleClass="association" id="vendasChildren">
+
+            <h:outputText value="Não há vendas associada com este vendedor."
+                       rendered="#{empty vendedorHome.vendas}"/>
+
+            <rich:dataTable value="#{vendedorHome.vendas}"
+                           var="_venda"
+                      rendered="#{not empty vendedorHome.vendas}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="vendasTable">
+                <rich:column sortBy="#{_venda.id}">
+                    <f:facet name="header">Id</f:facet>
+                    <h:outputText value="#{_venda.id}"/>
+                </rich:column>
+                <rich:column sortBy="#{_venda.dataVenda}">
+                    <f:facet name="header">Data venda</f:facet>
+                    <h:outputText value="#{_venda.dataVenda}">
+                         <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{vendedorHome.managed}" id="vendas">
+        <div class="actionButtons">
+            <s:button id="addvenda"
+                  value="Adicionar venda"
+                    view="/VendaEdit.xhtml"
+             propagation="none">
+                 <f:param name="vendedorId"
+                         value="#{vendedorHome.instance.id}"/>
+                 <f:param name="vendaFrom" value="Vendedor"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

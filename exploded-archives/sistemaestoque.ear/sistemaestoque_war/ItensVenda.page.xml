@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+   <param name="itensVendaFrom"/>
+   <param name="itensVendaId" value="#{itensVendaHome.itensVendaId}"/>
+   <param name="produtoFrom"/>
+   <param name="produtoId" value="#{produtoHome.produtoId}"/>
+   <param name="categoriaFrom"/>
+   <param name="categoriaId" value="#{categoriaHome.categoriaId}"/>
+
+   <param name="fornecedorFrom"/>
+   <param name="fornecedorId" value="#{fornecedorHome.fornecedorId}"/>
+
+   <param name="unidadeFrom"/>
+   <param name="unidadeId" value="#{unidadeHome.unidadeId}"/>
+
+
+   <param name="vendaFrom"/>
+   <param name="vendaId" value="#{vendaHome.vendaId}"/>
+   <param name="clienteFrom"/>
+   <param name="clienteId" value="#{clienteHome.clienteId}"/>
+
+   <param name="vendedorFrom"/>
+   <param name="vendedorId" value="#{vendedorHome.vendedorId}"/>
+
+
+
+
+</page>

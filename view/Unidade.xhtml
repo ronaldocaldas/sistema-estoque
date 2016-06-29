@@ -1,0 +1,111 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Unidade Detalhes</f:facet>
+
+
+        <s:decorate id="descricao" template="layout/display.xhtml">
+            <ui:define name="label">Descrição</ui:define>
+            <h:outputText value="#{unidadeHome.instance.descricao}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/UnidadeEdit.xhtml"
+                    id="edit"
+                 value="Editar"/>
+
+        <s:button view="/#{empty unidadeFrom ? 'UnidadeList' : unidadeFrom}.xhtml"
+                    id="done"
+                 value="Voltar"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Produtos</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="produtosChildren">
+
+        <h:outputText value="Não há produtos associada com este unidade."
+                   rendered="#{empty unidadeHome.produtos}"/>
+
+        <rich:dataTable value="#{unidadeHome.produtos}"
+                       var="_produto"
+                  rendered="#{not empty unidadeHome.produtos}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="produtosTable">
+            <rich:column sortBy="#{_produto.id}">
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_produto.id}"/>
+            </rich:column>
+            <rich:column sortBy="#{_produto.dataCadastro}">
+                <f:facet name="header">Data cadastro</f:facet>
+                <h:outputText value="#{_produto.dataCadastro}">
+                     <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_produto.descricao}">
+                <f:facet name="header">Descrição</f:facet>
+                <h:outputText value="#{_produto.descricao}"/>
+            </rich:column>
+            <rich:column sortBy="#{_produto.nome}">
+                <f:facet name="header">Nome</f:facet>
+                <h:outputText value="#{_produto.nome}"/>
+            </rich:column>
+            <rich:column sortBy="#{_produto.quantidade}">
+                <f:facet name="header">Quantidade</f:facet>
+                <h:outputText value="#{_produto.quantidade}"/>
+            </rich:column>
+            <rich:column sortBy="#{_produto.valorPago}">
+                <f:facet name="header">Valor pago</f:facet>
+                <h:outputText value="#{_produto.valorPago}"/>
+            </rich:column>
+            <rich:column sortBy="#{_produto.valorVenda}">
+                <f:facet name="header">Valor venda</f:facet>
+                <h:outputText value="#{_produto.valorVenda}"/>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Ação</f:facet>
+                <s:link id="selectproduto"
+                     value="Selecionar"
+                      view="/Produto.xhtml">
+                    <f:param name="produtoId"
+                            value="#{_produto.id}"/>
+                    <f:param name="produtoFrom" value="Unidade"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+              value="Adicionar produto"
+                view="/ProdutoEdit.xhtml">
+            <f:param name="unidadeId"
+                    value="#{unidadeHome.instance.id}"/>
+            <f:param name="produtoFrom" value="Unidade"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>
