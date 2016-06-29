@@ -14,6 +14,11 @@
 
         <rich:simpleTogglePanel label="Pesquisa por Venda" switchType="ajax">
 
+			 <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Data</ui:define>
+                <h:inputText id="nome" value="#{fornecedorList.fornecedor.nome}"/>
+            </s:decorate>
+			
             <s:decorate template="layout/display.xhtml">
                 <ui:define name="label">Combinar</ui:define>
                 <h:selectOneRadio id="logic" value="#{vendaList.restrictionLogicOperator}" styleClass="radio">
@@ -57,10 +62,10 @@
                 <ui:include src="layout/sort.xhtml">
                     <ui:param name="entityList" value="#{vendaList}"/>
                     <ui:param name="propertyLabel" value="Cliente"/>
-                    <ui:param name="propertyPath" value="venda.cliente.id"/>
+                    <ui:param name="propertyPath" value="venda.cliente.name"/>
                 </ui:include>
             </f:facet>
-            <h:outputText value="#{_venda.cliente.id}"/>
+            <h:outputText value="#{_venda.cliente.nome}"/>
         </h:column>
         <h:column>
             <f:facet name="header">
@@ -79,10 +84,10 @@
                 <ui:include src="layout/sort.xhtml">
                     <ui:param name="entityList" value="#{vendaList}"/>
                     <ui:param name="propertyLabel" value="Vendedor"/>
-                    <ui:param name="propertyPath" value="venda.vendedor.id"/>
+                    <ui:param name="propertyPath" value="venda.vendedor.name"/>
                 </ui:include>
             </f:facet>
-            <h:outputText value="#{_venda.vendedor.id}"/>
+            <h:outputText value="#{_venda.vendedor.nome}"/>
         </h:column>
         <rich:column styleClass="action">
             <f:facet name="header">Ação</f:facet>

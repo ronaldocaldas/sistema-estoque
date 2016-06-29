@@ -9,28 +9,6 @@
     template="layout/template.xhtml">
 
 <ui:define name="body">
-
-    <h:form id="itensVendaSearch" styleClass="edit">
-
-        <rich:simpleTogglePanel label="Pesquisa por Itens" switchType="ajax">
-
-            <s:decorate template="layout/display.xhtml">
-                <ui:define name="label">Combinar</ui:define>
-                <h:selectOneRadio id="logic" value="#{itensVendaList.restrictionLogicOperator}" styleClass="radio">
-                    <f:selectItem itemLabel="Tudo" itemValue="and"/>
-                    <f:selectItem itemLabel="Algum" itemValue="or"/>
-                </h:selectOneRadio>
-            </s:decorate>
-
-        </rich:simpleTogglePanel>
-
-        <div class="actionButtons">
-            <h:commandButton id="search" value="Pesquisar" action="/ItensVendaList.xhtml"/>
-            <s:button id="reset" value="Limpar" includePageParams="false"/>
-        </div>
-
-    </h:form>
-
     <rich:panel>
         <f:facet name="header">Resultado da Pesquisa de itens (#{empty itensVendaList.resultList ? 0 : (itensVendaList.paginated ? itensVendaList.resultCount : itensVendaList.resultList.size)})</f:facet>
     <div class="results" id="itensVendaList">
@@ -157,7 +135,7 @@
         <s:button view="/ItensVendaEdit.xhtml"
                     id="create"
            propagation="none"
-                 value="Criar itensVenda">
+                 value="Criar Itens">
             <f:param name="itensVendaId"/>
         </s:button>
     </s:div>

@@ -39,22 +39,21 @@
 			value="Vendedor" propagation="none" />
 	</rich:toolBarGroup>
 
-    <rich:toolBarGroup>
-		<s:link id="menuRegistroVendaId" view="/RegistroVendaList.xhtml"
+	 <rich:toolBarGroup>
+		<s:link id="menuItemId" view="/ItensVendaList.xhtml"
+			value="Cadastrar Item" propagation="none" />
+	</rich:toolBarGroup>
+	
+	 <rich:toolBarGroup>
+		<s:link id="menuVendaId" view="/VendaList.xhtml"
 			value="Realizar Venda" propagation="none" />
 	</rich:toolBarGroup>
-
-	<rich:dropDownMenu showDelay="250" hideDelay="0" submitMode="none">
-		<f:facet name="label">Browse data</f:facet>
-		<rich:menuItem>
-			<s:link view="/VendaList.xhtml" value="Venda List" id="VendaId"
-				includePageParams="false" propagation="none" />
-		</rich:menuItem>
-		<rich:menuItem>
-			<s:link view="/ItensVendaList.xhtml" value="ItensVenda List"
-				id="ItensVendaId" includePageParams="false" propagation="none" />
-		</rich:menuItem>
-	</rich:dropDownMenu>
+	
+	 <rich:toolBarGroup>
+		<s:link id="menuRegistroVendaId" view="/RegistroVendaList.xhtml"
+			value="Realizar Venda2" propagation="none" />
+	</rich:toolBarGroup>
+	
 	<!-- @newMenuItem@ -->
 	<rich:toolBarGroup location="right">
 		<h:outputText id="menuWelcomeId"

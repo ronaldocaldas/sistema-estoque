@@ -1,0 +1,43 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+
+<ui:define name="body">
+
+<h:form id="registroVenda" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">Registrar Venda</f:facet>
+            <s:decorate id="selectVendedor" template="layout/edit.xhtml">
+                <ui:define name="label">Vendedor</ui:define>
+                 <h:selectOneMenu value="#{registroVendaHome.instance.vendedor}">
+                <f:selectItem itemLabel="Selecione um vendedor:"/>
+					<f:selectItems value="#{vendedorList.vendedorSelect}" /> 
+				</h:selectOneMenu>
+            </s:decorate>
+            
+               <s:decorate id="selectCliente" template="layout/edit.xhtml">
+                <ui:define name="label">Cliente</ui:define>
+                
+                <h:selectOneMenu value="#{registroVendaHome.instance.cliente}">
+				<f:selectItem itemLabel="Selecione um cliente:"/>
+					<f:selectItems value="#{clienteList.clienteSelect}" /> 
+				</h:selectOneMenu>
+            </s:decorate>
+            
+            </rich:panel>
+          
+              <h:commandButton id="save"
+                          value="Salvar"
+                         action="#{registroVenda.salvarVenda}"/>
+            </h:form>
+</ui:define>
+
+</ui:composition>

@@ -12,7 +12,7 @@ public class VendaList extends EntityQuery<Venda> {
 
 	private static final String EJBQL = "select venda from Venda venda";
 
-	private static final String[] RESTRICTIONS = {};
+	private static final String[] RESTRICTIONS = {"venda.data = (#{vendaList.venda.dataVenda},'%'))",};
 
 	private Venda venda = new Venda();
 

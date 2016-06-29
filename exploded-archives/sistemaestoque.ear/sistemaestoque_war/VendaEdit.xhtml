@@ -19,7 +19,7 @@
            <s:decorate id="dataVendaField" template="layout/edit.xhtml">
                 <ui:define name="label">Data venda</ui:define>
                 <rich:calendar id="dataVenda"
-                          value="#{vendaHome.instance.dataVenda}" datePattern="MM/dd/yyyy hh:mm a"/>
+                          value="#{vendaHome.instance.dataVenda}" datePattern="dd/MM/yyyy hh:mm a"/>
             </s:decorate>
 
             <div style="clear:both">
@@ -125,7 +125,7 @@
     <rich:tab label="Itens vendas">
         <h:form styleClass="association" id="itensVendasChildren">
 
-            <h:outputText value="Não há itensVendas associada com este venda."
+            <h:outputText value="Não há itens associada com este venda."
                        rendered="#{empty vendaHome.itensVendas}"/>
 
             <rich:dataTable value="#{vendaHome.itensVendas}"
@@ -152,7 +152,7 @@
         <f:subview rendered="#{vendaHome.managed}" id="itensVendas">
         <div class="actionButtons">
             <s:button id="additensVenda"
-                  value="Adicionar itensVenda"
+                  value="Adicionar Itens"
                     view="/ItensVendaEdit.xhtml"
              propagation="none">
                  <f:param name="vendaId"

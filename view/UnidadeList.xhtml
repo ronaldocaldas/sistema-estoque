@@ -19,14 +19,6 @@
                 <h:inputText id="descricao" value="#{unidadeList.unidade.descricao}"/>
             </s:decorate>
 
-            <s:decorate template="layout/display.xhtml">
-                <ui:define name="label">Combinar</ui:define>
-                <h:selectOneRadio id="logic" value="#{unidadeList.restrictionLogicOperator}" styleClass="radio">
-                    <f:selectItem itemLabel="Tudo" itemValue="and"/>
-                    <f:selectItem itemLabel="Algum" itemValue="or"/>
-                </h:selectOneRadio>
-            </s:decorate>
-
         </rich:simpleTogglePanel>
 
         <div class="actionButtons">
