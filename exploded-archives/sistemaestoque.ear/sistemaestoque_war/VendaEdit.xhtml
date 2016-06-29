@@ -16,10 +16,7 @@
         <rich:panel>
             <f:facet name="header">#{vendaHome.managed ? 'Editar' : 'Adicionar'} Venda</f:facet>
 
-
-
-
-            <s:decorate id="dataVendaField" template="layout/edit.xhtml">
+           <s:decorate id="dataVendaField" template="layout/edit.xhtml">
                 <ui:define name="label">Data venda</ui:define>
                 <rich:calendar id="dataVenda"
                           value="#{vendaHome.instance.dataVenda}" datePattern="MM/dd/yyyy hh:mm a"/>
